@@ -75,7 +75,7 @@ const RecommendedCarousel = ({ title = "Recomendados", items = recommendedList }
                     <h3 className="font-semibold text-sm mb-2">{item.title}</h3>
                     <span className="text-sm max-lg:line-clamp-6 max-xl:line-clamp-10">{item.desc}</span>
                     <div className="btn-comenzar flex content-center bg-black text-white hover:bg-white hover:text-black py-2 px-3 text-sm rounded-md absolute left-3 bottom-4">
-                      <img src="src/assets/play.svg" alt="play" className="mr-2" />
+                      <img src="/play.svg" alt="play" className="mr-2" />
                       {item.start}
                     </div>
                   </div>
