@@ -2,10 +2,12 @@
 
 
 import React, { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import HeroBanner from "./components/HeroBanner";
 import RecommendedCarousel from "./components/RecommendedCarousel";
 import Loader from "./components/Loader";
+import SeriesDetail from "./pages/SeriesDetail/index";
 import { slideData } from "./data/slideData";
 
 function App() {
@@ -20,7 +22,6 @@ function App() {
       }
     };
 
-    // 1) Pre-carga de imágenes críticas del Hero
     const urls = slideData
       .flatMap(s => [s.img, s.imgDesktop, s.imgMobile])
       .filter(Boolean);
@@ -35,11 +36,7 @@ function App() {
     );
 
     Promise.allSettled(preloadPromises).then(hide);
-
-    // 2) Fallback por tiempo (por si algo queda colgado)
     const timeout = setTimeout(hide, 3500);
-
-    // 3) Como extra, si igualmente load ocurre antes, ocultamos
     const onLoad = () => hide();
     window.addEventListener("load", onLoad);
 
@@ -54,8 +51,20 @@ function App() {
       {loading && <Loader />}
       <div className="bg-black">
         <Header />
-        <HeroBanner />
-        <RecommendedCarousel />
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <HeroBanner />
+                <RecommendedCarousel />
+              </>
+            }
+          />
+
+          <Route path="/series/:id" element={<SeriesDetail />} />
+        </Routes>
       </div>
     </>
   );
