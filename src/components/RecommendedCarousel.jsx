@@ -1,18 +1,32 @@
 // src/components/RecommendedCarousel.jsx
 
-import React, { useRef } from "react";
+import React, { useRef, useMemo } from "react";
 import { recommendedList } from "../data/recommendedList";
-import "./RecommendedCarousel.css"; // Para los estilos personalizados
+import "./RecommendedCarousel.css";
 
-const RecommendedCarousel = ({ title = "Recomendados", items = recommendedList }) => {
+const RecommendedCarousel = ({
+  title = "Recomendados",
+  items = recommendedList,
+  maxItems = 16, // cantidad máxima a mostrar
+}) => {
   const containerRef = useRef(null);
+
+  // 🔀 Mezcla y limita los items una sola vez
+  const shuffledItems = useMemo(() => {
+    const copy = [...items];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy.slice(0, maxItems);
+  }, [items, maxItems]);
 
   const getCardWidth = () => {
     const w = window.innerWidth;
-    if (w >= 1800) return 18 * 16 + 24;
-    if (w >= 1280) return 16 * 16 + 24;
-    if (w >= 1024) return 14 * 16 + 24;
-    if (w >= 768) return 12 * 16 + 16;
+    if (w >= 1800) return 90 * 17 + 25;
+    if (w >= 1280) return 80 * 17.2 + 25;
+    if (w >= 1024) return 56 * 17.3 + 25;
+    if (w >= 768) return 60 * 17 + 17;
     return 10 * 16 + 12;
   };
 
@@ -55,7 +69,7 @@ const RecommendedCarousel = ({ title = "Recomendados", items = recommendedList }
             className="w-screen flex overflow-x-auto scroll-smooth hide-scroll-ba pb-4 max-md:pt-1 max-md:px-3 md:pt-6 md:px-19 lg:px-22 xl:px-23 relative carousel-container"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {items.map((item, i) => (
+            {shuffledItems.map((item, i) => (
               <a
                 key={i}
                 href={item.link}
@@ -100,3 +114,4 @@ const RecommendedCarousel = ({ title = "Recomendados", items = recommendedList }
 };
 
 export default RecommendedCarousel;
+
