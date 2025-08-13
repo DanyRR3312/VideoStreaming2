@@ -4,22 +4,18 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import Banner from "./components/Banner";
-import { slideData } from "../../data/slideData";
+import seriesDetail from "../../data/SeriesDetail";
 
-export default function SeriesDetail() {
+const SeriesDetailPage = () => {
+  const { id } = useParams();
+  const serie = seriesDetail.find(s => s.id === id);
 
-    const { id } = useParams();
-    const serie = slideData.find(s => s.page.includes(id));
+  return (
+    <div>
+      <Banner serie={serie} />
+      {/* Otros componentes */}
+    </div>
+  );
+};
 
-    return (
-        <>
-            <Banner serie={serie} />
-            <div className="text-white p-4">
-                <h1 className="text-3xl font-bold mb-4">Detalle de la Serie</h1>
-                <p>ID de la serie: {id}</p>
-                {/* Aquí puedes agregar más detalles de la serie usando el ID */}
-                
-            </div>
-        </>
-    );
-}
+export default SeriesDetailPage;
