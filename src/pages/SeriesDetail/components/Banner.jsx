@@ -24,7 +24,7 @@ const Banner = ({ serie }) => {
                     alt={serie.title}
                     className="md:hidden h-full w-full object-cover"
                 />
-                <div className="fade-overlay"></div>
+                <div className="fade-overlay-banner"></div>
             </div>
 
             {/* Info banner */}
