@@ -19,7 +19,7 @@ const seriesDetail = [
         seasons: [
             {
                 id: "s1",
-                title: "Temporada 1",
+                SeasonTitle: "Season 1 - Kaoru Hana wa Rin to Saku",
                 poster: "https://…/s1-poster.webp",
                 episodes: [
                     {
@@ -35,6 +35,36 @@ const seriesDetail = [
                     {
                         id: "e2",
                         title: "E-2 Ambos Somos",
+                        duration: "24m",
+                        thumbnail: "https://pruebas-assets-videostreaming.b-cdn.net/VideoStreaming/series/Kaoru%20Hana%20wa%20Rin%20to%20Saku/assets/Thumblain-Ep/thumbnail-01.webp",
+                        synopsis: "La relación entre Rintaro y Kaoruko comienza a desarrollarse más profundamente. Después de conocerse en la pastelería de la familia de Rintaro, Kaoruko empieza a visitarlo con más frecuencia. Sus interacciones se vuelven más cómodas y personales, y ambos se dan cuenta de que disfrutan de la compañía del otro.",
+                        videoUrl: "https://cdn…/s1e1.mp4",
+                        vttUrl: "https://cdn…/s1e1.vtt"
+                    },
+
+                    
+                    
+                ]
+            },
+
+            {
+                id: "s2",
+                SeasonTitle: "Season 2 - Kaoru Hana wa Rin to Saku",
+                poster: "https://…/s1-poster.webp",
+                episodes: [
+                    {
+                        id: "e1",
+                        title: "E-1 capitulo de temporada 2",
+                        duration: "24m",
+                        thumbnail: "https://pruebas-assets-videostreaming.b-cdn.net/VideoStreaming/series/Kaoru%20Hana%20wa%20Rin%20to%20Saku/assets/Thumblain-Ep/thumbnail-01.webp",
+                        synopsis: "Rintaro Tsumugi, un chico alto y con una apariencia intimidante que estudia en la preparatoria para chicos Chidori. Su aspecto a menudo lo hace ver como un delincuente, lo que genera miedo y desprecio, especialmente entre las chicas de la preparatoria de élite Kikyo, la escuela vecina.",
+                        videoUrl: "https://cdn…/s1e1.mp4",
+                        vttUrl: "https://cdn…/s1e1.vtt"
+                    },
+
+                    {
+                        id: "e2",
+                        title: "E-2 Segundo Capitulo de temporada 2",
                         duration: "24m",
                         thumbnail: "https://pruebas-assets-videostreaming.b-cdn.net/VideoStreaming/series/Kaoru%20Hana%20wa%20Rin%20to%20Saku/assets/Thumblain-Ep/thumbnail-01.webp",
                         synopsis: "La relación entre Rintaro y Kaoruko comienza a desarrollarse más profundamente. Después de conocerse en la pastelería de la familia de Rintaro, Kaoruko empieza a visitarlo con más frecuencia. Sus interacciones se vuelven más cómodas y personales, y ambos se dan cuenta de que disfrutan de la compañía del otro.",
@@ -72,7 +102,7 @@ const seriesDetail = [
         seasons: [
             {
                 id: "s1",
-                title: "Temporada 1",
+                SeasonTitle: "Temporada 1",
                 poster: "https://…/s1-poster.webp",
                 episodes: [
                     {
