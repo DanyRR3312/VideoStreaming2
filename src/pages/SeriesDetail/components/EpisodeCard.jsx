@@ -1,10 +1,19 @@
 // .src/pages/SeriesDetail/components/EpisodeCard.jsx
 
-import React from "react";
+// src/pages/SeriesDetail/components/EpisodeCard.jsx
 
-const EpisodeCard = ({ episode, seriesTitle }) => {
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+const EpisodeCard = ({ episode, seriesTitle, seriesId, seasonId }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/episode/${seriesId}/${seasonId}/${episode.id}`);
+  };
+
   return (
-    <main className="group relative border-2 rounded-lg w-65 overflow-hidden">
+    <main className="group relative rounded-lg w-65 overflow-hidden">
 
       {/* Imagen + Play + Duración */}
       <section className="relative">
@@ -32,16 +41,22 @@ const EpisodeCard = ({ episode, seriesTitle }) => {
         <p className="text-white font-medium my-2">{episode.title}</p>
         <div className="flex justify-between">
           <p className="text-sm text-stone-400">Subtitulado</p>
-          <img src="/more.svg" alt="Más opciones" />
+          <img src="/more.svg" alt="Más opciones" className="relative z-10 cursor-pointer" />
         </div>
       </section>
 
       {/* Hover resumen */}
-      <div className="absolute inset-0 bg-black/80 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out p-4 flex items-center justify-center text-center text-sm translate-y-4 group-hover:translate-y-0">
-        <p>{episode.synopsis}</p>
+      <div
+        className="p-2 cursor-pointer absolute inset-0 bg-black/80 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out text-sm translate-y-4 group-hover:translate-y-0"
+        onClick={handleClick}
+      >
+        <p className="text-[.8rem] text-neutral-400 line-clamp-1">{seriesTitle}</p>
+        <p className="text-lg font-medium mt-1">{episode.title}</p>
+        <p className="line-clamp-6 mt-1">{episode.synopsis}</p>
       </div>
     </main>
   );
 };
 
 export default EpisodeCard;
+

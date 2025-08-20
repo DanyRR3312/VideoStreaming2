@@ -1,5 +1,7 @@
-// src/pages/index.jsx
+// src/pages/SeriesDetail/index.jsx
 
+
+// src/pages/SeriesDetail/index.jsx
 
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -15,17 +17,27 @@ const SeriesDetailPage = () => {
   const seasons = serie?.seasons || [];
   const [selectedSeason, setSelectedSeason] = useState(seasons[0]);
 
+  if (!serie) {
+    return (
+      <div className="text-white p-8">
+        <h1 className="text-2xl font-bold">Serie no encontrada</h1>
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <div className="bg-black text-white">
+      {/* Banner principal con imagen y título */}
       <Banner serie={serie} />
 
+      {/* Selector de temporada */}
       <SeasonSelector
         serie={serie}
         selectedSeason={selectedSeason}
         setSelectedSeason={setSelectedSeason}
       />
 
-      {/* Solo renderiza episodios de la temporada seleccionada */}
+      {/* Episodios de la temporada seleccionada */}
       <section key={selectedSeason.id} className="mb-8 mx-16">
         <div className="w-full flex flex-wrap gap-4 p-4">
           {selectedSeason.episodes.map((episode, idx) => (
@@ -33,6 +45,8 @@ const SeriesDetailPage = () => {
               key={episode.id || idx}
               episode={episode}
               seriesTitle={serie.title}
+              seriesId={serie.id}           // ✅ Prop necesario para navegar
+              seasonId={selectedSeason.id}  // ✅ Prop necesario para navegar
             />
           ))}
         </div>

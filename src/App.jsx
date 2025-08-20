@@ -1,6 +1,7 @@
 // App.jsx : Componente principal de la aplicación
 
 
+// App.jsx
 import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
@@ -8,6 +9,7 @@ import HeroBanner from "./components/HeroBanner";
 import RecommendedCarousel from "./components/RecommendedCarousel";
 import Loader from "./components/Loader";
 import SeriesDetail from "./pages/SeriesDetail/index";
+import EpisodeDetail from "./pages/EpisodeDetail/index"; // 👈 Importar nuevo componente
 import { slideData } from "./data/slideData";
 
 function App() {
@@ -64,6 +66,9 @@ function App() {
           />
 
           <Route path="/series/:id" element={<SeriesDetail />} />
+
+          {/* ✅ Nueva ruta para detalle de episodio */}
+          <Route path="/episode/:seriesId/:seasonId/:episodeId" element={<EpisodeDetail />} />
         </Routes>
       </div>
     </>
