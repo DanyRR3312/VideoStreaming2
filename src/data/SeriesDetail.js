@@ -28,7 +28,7 @@ const seriesDetail = [
                         duration: "24m",
                         thumbnail: "https://pruebas-assets-videostreaming.b-cdn.net/VideoStreaming/series/Kaoru%20Hana%20wa%20Rin%20to%20Saku/assets/Thumblain-Ep/thumbnail-01.webp",
                         synopsis: "Rintaro Tsumugi, un chico alto y con una apariencia intimidante que estudia en la preparatoria para chicos Chidori. Su aspecto a menudo lo hace ver como un delincuente, lo que genera miedo y desprecio, especialmente entre las chicas de la preparatoria de élite Kikyo, la escuela vecina.",
-                        videoUrl: "https://cdn…/s1e1.mp4",
+                        videoUrl: "https://pruebas-assets-videostreaming.b-cdn.net/VideoStreaming/series/Kaoru%20Hana%20wa%20Rin%20to%20Saku/stream/master.m3u8",
                         vttUrl: "https://cdn…/s1e1.vtt"
                     },
 
@@ -38,7 +38,7 @@ const seriesDetail = [
                         duration: "24m",
                         thumbnail: "https://pruebas-assets-videostreaming.b-cdn.net/VideoStreaming/series/Kaoru%20Hana%20wa%20Rin%20to%20Saku/assets/Thumblain-Ep/thumbnail-01.webp",
                         synopsis: "La relación entre Rintaro y Kaoruko comienza a desarrollarse más profundamente. Después de conocerse en la pastelería de la familia de Rintaro, Kaoruko empieza a visitarlo con más frecuencia. Sus interacciones se vuelven más cómodas y personales, y ambos se dan cuenta de que disfrutan de la compañía del otro.",
-                        videoUrl: "https://cdn…/s1e1.mp4",
+                        videoUrl: "https://pruebas-assets-videostreaming.b-cdn.net/VideoStreaming/series/Kaoru%20Hana%20wa%20Rin%20to%20Saku/stream/master.m3u8",
                         vttUrl: "https://cdn…/s1e1.vtt"
                     },
 

@@ -1,0 +1,93 @@
+
+body {
+    user-select: none;
+    overflow-x: none;
+}
+
+main{
+    overflow-x: clip;
+}
+
+.control-overlay{
+    background: rgba(0, 0, 0, 0.5);
+}
+
+#progress-thumb {
+    cursor: grab;
+}
+
+#progress-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.5);
+}
+
+#progress-thumb {
+    transition: transform 0.2s ease-out, background-color 0.2s;
+}
+
+#progress-thumb:hover {
+    transform: scale(1.3);
+    background-color: #f87171; /* un rojo suave para efecto visual */
+}
+
+.player.fullscreen {
+    padding-top: 0 !important;
+    width: 100%;
+    height: 100%;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player.fullscreen video {
+    width: 100%;
+    height: 100%;
+    max-width: 100vw;
+    max-height: 100vh;
+    object-fit: contain !important;
+}
+
+
+#fullscreen-button img:hover {
+    transform: scale(1.2);
+    transition: transform 0.2s;
+}
+
+#settings-panel {
+  position: absolute;
+  top: 0;
+  right: -240px; /* Asegura que esté fuera de la vista */
+  width: 240px;
+  height: 100%;
+  background-color: #111827;
+  color: white;
+  z-index: 50;
+  padding: 1rem;
+  box-shadow: -4px 0 6px rgba(0, 0, 0, 0.3);
+  transition: right 0.3s ease, opacity 0.3s ease; /* Añade transición para la opacidad */
+  overflow-y: auto;
+  border-left: 1px solid #374151;
+  font-family: sans-serif;
+  font-size: 14px;
+  border-radius: 8px 0 0 8px;
+  opacity: 0; /* Oculto por defecto */
+  pointer-events: none; /* Deshabilita interacciones cuando está oculto */
+}
+
+/* Cuando se abre */
+#settings-panel.open {
+  right: 0;
+  opacity: 1; /* Visible cuando está abierto */
+  pointer-events: auto; /* Habilita interacciones cuando está abierto */
+}
+
+#close-settings {
+  background-color: transparent;
+  z-index: 60;
+}
+
+#close-settings:hover img {
+  transform: scale(1.2);
+  transition: transform 0.2s ease;
+}
