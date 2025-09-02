@@ -26,7 +26,7 @@ const SeriesDetailPage = () => {
   }
 
   return (
-    <div className="bg-black text-white">
+    <div className="bg-black text-white relative top-16">
       {/* Banner principal con imagen y título */}
       <Banner serie={serie} />
 

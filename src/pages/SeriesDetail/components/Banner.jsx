@@ -11,7 +11,7 @@ const Banner = ({ serie }) => {
 
     return (
         <section
-            className="sm:h-[50rem] md:h-[38em] lg:h-[45em] xl:h-[51em] 2xl:h-[45rem] bg-black relative overflow-hidden min-[112.5rem]:h-[50rem]"
+            className="sm:h-[50rem] md:h-[38em] lg:h-[45em] xl:h-[51em] 2xl:h-[40rem] bg-black relative overflow-hidden min-[112.5rem]:h-[50rem]"
         >
             <div className="carousel-item active">
                 <img
