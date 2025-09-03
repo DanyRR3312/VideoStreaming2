@@ -22,9 +22,7 @@ const EpisodeDetail = () => {
 
   return (
     <>
-
-      <VideoPlayer src={episode.videoUrl} />
-
+      <VideoPlayer src={episode.videoUrl} poster={season?.poster} />
       <div className="text-white p-4">
         <h1 className="text-2xl font-bold">{episode.title}</h1>
         <p className="mt-2">Serie: {serie?.title}</p>
