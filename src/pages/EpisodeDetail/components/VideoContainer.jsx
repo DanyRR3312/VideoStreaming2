@@ -2,14 +2,49 @@ import React, { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
 import 'plyr/dist/plyr.css';
 
-const VideoPlayer = ({ src, poster }) => {
+const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
     const videoRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [progress, setProgress] = useState(0); // avance %
     const [buffered, setBuffered] = useState(0); // precarga %
 
+    // Miniaturas
+    const [thumbnails, setThumbnails] = useState([]);
+    const [preview, setPreview] = useState(null); // { leftPx, thumb }¨
 
+        // Genera el string para backgroundImage dinámicamente
+    const thumbsBg = thubs.length ? thubs.map(url => `url(${url})`).join(', ') : undefined;
+
+    // 🔹 Parsear archivo VTT
+    useEffect(() => {
+        if (!vttUrl) return;
+        fetch(vttUrl)
+            .then(res => res.text())
+            .then(text => {
+                const lines = text.split("\n").filter(l => l.trim() !== "" && !l.startsWith("WEBVTT"));
+                const data = [];
+                for (let i = 0; i < lines.length; i += 2) {
+                    const [start, end] = lines[i].split(" --> ");
+                    const [file, coords] = lines[i + 1].split("#xywh=");
+                    const [x, y, w, h] = coords.split(",").map(Number);
+                    data.push({
+                        start: parseTime(start),
+                        end: parseTime(end),
+                        x, y, w, h,
+                        src: file
+                    });
+                }
+                setThumbnails(data);
+            });
+    }, [vttUrl]);
+
+    const parseTime = (t) => {
+        const [h, m, s] = t.split(":");
+        return parseFloat(h) * 3600 + parseFloat(m) * 60 + parseFloat(s);
+    };
+
+    // 🔹 Lógica de reproducción HLS
     useEffect(() => {
         const video = videoRef.current;
         video.preload = 'auto';
@@ -71,7 +106,6 @@ const VideoPlayer = ({ src, poster }) => {
         };
     }, [src]);
 
-
     const togglePlay = () => {
         const video = videoRef.current;
         video.paused ? video.play() : video.pause();
@@ -100,6 +134,19 @@ const VideoPlayer = ({ src, poster }) => {
                 {/* Barra de progreso */}
                 <div
                     className="absolute bottom-0 left-0 w-full h-2 bg-gray-800 cursor-pointer z-40"
+                    onMouseMove={(e) => {
+                        if (!videoRef.current || !thumbnails.length) return;
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        const posX = e.clientX - rect.left;
+                        const percent = posX / rect.width;
+                        const time = percent * videoRef.current.duration;
+
+                        const thumb = thumbnails.find(t => time >= t.start && time < t.end);
+                        if (thumb) {
+                            setPreview({ leftPx: posX, thumb });
+                        }
+                    }}
+                    onMouseLeave={() => setPreview(null)}
                     onClick={(e) => {
                         const rect = e.currentTarget.getBoundingClientRect();
                         const clickX = e.clientX - rect.left;
@@ -120,18 +167,49 @@ const VideoPlayer = ({ src, poster }) => {
                     ></div>
                 </div>
 
+                {/* Tooltip de preview */}
+                {preview && (
+                    <div
+                        className="absolute bottom-8 transform -translate-x-1/2"
+                        style={{ left: `${preview.leftPx}px` }}
+                    >
+                        <div
+                            className="w-[160px] h-[90px] bg-black bg-cover bg-no-repeat rounded shadow-lg"
+                            style={{
+                                backgroundImage: thumbsBg,
+                                backgroundPosition: `-${preview.thumb.x}px -${preview.thumb.y}px`,
+                                backgroundSize: `${preview.thumb.w * 10}px ${preview.thumb.h * 10}px` // escala total del spritesheet
+                            }}
+                        />
+                    </div>
+                )}
 
-                {/* Botón personalizado */}
+                {/* Botones extra */}
+                <button 
+                    id='replay-btn'
+                    className='w-25 h-25 z-30 absolute top-1/2 -translate-y-1/2 right-3/4'
+                >
+                    <img src="/video-replay.svg" alt="replay" />
+                </button>
+
                 <button
                     onClick={togglePlay}
                     className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 p-3 transition duration-200 z-30"
                 >
                     {isPlaying ? (
-                        <img src="/video-player-pause.svg" alt="Pause" className="w-15 h-15" />
+                        <img src="/video-player-pause.svg" alt="Pause" className="w-25 h-25" />
                     ) : (
-                        <img src="/video-player-play.svg" alt="Play" className="w-15 h-15" />
+                        <img src="/video-player-play.svg" alt="Play" className="w-25 h-25" />
                     )}
                 </button>
+
+                <button 
+                    id='forward-btn'
+                    className='w-25 h-25 z-30 absolute top-1/2 -translate-y-1/2 left-3/4'
+                >
+                    <img src="/video-forward.svg" alt="forward" />
+                </button>
+
             </div>
         </div>
     );

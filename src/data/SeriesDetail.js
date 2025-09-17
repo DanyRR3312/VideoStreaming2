@@ -29,7 +29,12 @@ const seriesDetail = [
                         thumbnail: "https://PreguntasPorMateria-ElsucioDan.b-cdn.net/VideoStreaming/series/Kaoru%20Hana%20wa%20Rin%20to%20Saku/assets/Thumblain-Ep/thumbnail-01.webp",
                         synopsis: "Rintaro Tsumugi, un chico alto y con una apariencia intimidante que estudia en la preparatoria para chicos Chidori. Su aspecto a menudo lo hace ver como un delincuente, lo que genera miedo y desprecio, especialmente entre las chicas de la preparatoria de élite Kikyo, la escuela vecina.",
                         videoUrl: "https://PreguntasPorMateria-ElsucioDan.b-cdn.net/VideoStreaming/series/Kaoru%20Hana%20wa%20Rin%20to%20Saku/stream/master.m3u8",
-                        vttUrl: "https://cdn…/s1e1.vtt"
+                        vttUrl: "https://PreguntasPorMateria-ElsucioDan.b-cdn.net/VideoStreaming/series/Kaoru%20Hana%20wa%20Rin%20to%20Saku/assets/Thumblain-Ep/thumbs.vtt",
+                        thubs: [
+                            "https://PreguntasPorMateria-ElsucioDan.b-cdn.net/VideoStreaming/series/Kaoru%20Hana%20wa%20Rin%20to%20Saku/assets/Thumblain-Ep/thumbs_001.jpg",
+                            "https://PreguntasPorMateria-ElsucioDan.b-cdn.net/VideoStreaming/series/Kaoru%20Hana%20wa%20Rin%20to%20Saku/assets/Thumblain-Ep/thumbs_002.jpg",
+                            "https://PreguntasPorMateria-ElsucioDan.b-cdn.net/VideoStreaming/series/Kaoru%20Hana%20wa%20Rin%20to%20Saku/assets/Thumblain-Ep/thumbs_003.jpg"
+                        ]
                     },
 
                     {
