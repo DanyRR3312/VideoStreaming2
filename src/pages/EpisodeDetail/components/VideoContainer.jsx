@@ -6,17 +6,14 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
     const videoRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [progress, setProgress] = useState(0); // avance %
-    const [buffered, setBuffered] = useState(0); // precarga %
+    const [progress, setProgress] = useState(0);
+    const [buffered, setBuffered] = useState(0);
 
-    // Miniaturas
     const [thumbnails, setThumbnails] = useState([]);
-    const [preview, setPreview] = useState(null); // { leftPx, thumb }¨
+    const [preview, setPreview] = useState(null);
 
-        // Genera el string para backgroundImage dinámicamente
     const thumbsBg = thubs.length ? thubs.map(url => `url(${url})`).join(', ') : undefined;
 
-    // 🔹 Parsear archivo VTT
     useEffect(() => {
         if (!vttUrl) return;
         fetch(vttUrl)
@@ -44,7 +41,6 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
         return parseFloat(h) * 3600 + parseFloat(m) * 60 + parseFloat(s);
     };
 
-    // 🔹 Lógica de reproducción HLS
     useEffect(() => {
         const video = videoRef.current;
         video.preload = 'auto';
@@ -111,18 +107,74 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
         video.paused ? video.play() : video.pause();
     };
 
+    useEffect(() => {
+        const progressBar = document.getElementById('progress-bar');
+        if (!progressBar || !videoRef.current) return;
+
+        let isDragging = false;
+
+        const updateTime = (clientX) => {
+            const rect = progressBar.getBoundingClientRect();
+            const posX = clientX - rect.left;
+            const percent = Math.max(0, Math.min(posX / rect.width, 1));
+            videoRef.current.currentTime = percent * videoRef.current.duration;
+        };
+
+        const handleMouseDown = (e) => {
+            isDragging = true;
+            updateTime(e.clientX);
+        };
+
+        const handleMouseMove = (e) => {
+            if (isDragging) updateTime(e.clientX);
+        };
+
+        const handleMouseUp = () => {
+            isDragging = false;
+        };
+
+        const handleTouchStart = (e) => {
+            isDragging = true;
+            updateTime(e.touches[0].clientX);
+        };
+
+        const handleTouchMove = (e) => {
+            if (isDragging) updateTime(e.touches[0].clientX);
+        };
+
+        const handleTouchEnd = () => {
+            isDragging = false;
+        };
+
+        progressBar.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+
+        progressBar.addEventListener('touchstart', handleTouchStart);
+        window.addEventListener('touchmove', handleTouchMove);
+        window.addEventListener('touchend', handleTouchEnd);
+
+        return () => {
+            progressBar.removeEventListener('mousedown', handleMouseDown);
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+
+            progressBar.removeEventListener('touchstart', handleTouchStart);
+            window.removeEventListener('touchmove', handleTouchMove);
+            window.removeEventListener('touchend', handleTouchEnd);
+        };
+    }, []);
+
     return (
         <div id="video-container" className="w-full max-w-4xl mx-auto relative top-16 z-50">
             <div className="aspect-video bg-black rounded overflow-hidden relative">
 
-                {/* Loader */}
                 {isLoading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 z-20">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-red-500 border-opacity-75"></div>
                     </div>
                 )}
 
-                {/* Video */}
                 <video
                     ref={videoRef}
                     className="w-full h-full object-contain"
@@ -131,9 +183,9 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
                     poster={poster}
                 />
 
-                {/* Barra de progreso */}
                 <div
-                    className="absolute bottom-0 left-0 w-full h-2 bg-gray-800 cursor-pointer z-40"
+                    id="progress-bar"
+                    className="absolute bottom-0 left-0 w-full h-2 bg-gray-800 cursor-pointer z-40 select-none"
                     onMouseMove={(e) => {
                         if (!videoRef.current || !thumbnails.length) return;
                         const rect = e.currentTarget.getBoundingClientRect();
@@ -143,7 +195,18 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
 
                         const thumb = thumbnails.find(t => time >= t.start && time < t.end);
                         if (thumb) {
-                            setPreview({ leftPx: posX, thumb });
+                            const tooltipWidth = 160;
+                            const padding = 8;
+                            let adjustedLeft = posX;
+
+                            if (posX < tooltipWidth / 2 + padding) {
+                                adjustedLeft = tooltipWidth / 2 + padding;
+                            }
+                            if (posX > rect.width - tooltipWidth / 2 - padding) {
+                                adjustedLeft = rect.width - tooltipWidth / 2 - padding;
+                            }
+
+                            setPreview({ leftPx: adjustedLeft, thumb });
                         }
                     }}
                     onMouseLeave={() => setPreview(null)}
@@ -154,20 +217,17 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
                         videoRef.current.currentTime = newTime;
                     }}
                 >
-                    {/* Precarga */}
                     <div
                         className="absolute top-0 left-0 h-full bg-gray-500 bg-opacity-50"
                         style={{ width: `${buffered}%` }}
                     ></div>
 
-                    {/* Progreso */}
                     <div
                         className="absolute top-0 left-0 h-full bg-red-500 transition-all duration-100 ease-linear"
                         style={{ width: `${progress}%` }}
                     ></div>
                 </div>
 
-                {/* Tooltip de preview */}
                 {preview && (
                     <div
                         className="absolute bottom-8 transform -translate-x-1/2"
@@ -178,17 +238,13 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
                             style={{
                                 backgroundImage: thumbsBg,
                                 backgroundPosition: `-${preview.thumb.x}px -${preview.thumb.y}px`,
-                                backgroundSize: `${preview.thumb.w * 10}px ${preview.thumb.h * 10}px` // escala total del spritesheet
+                                backgroundSize: `${preview.thumb.w * 10}px ${preview.thumb.h * 10}px`
                             }}
                         />
                     </div>
                 )}
 
-                {/* Botones extra */}
-                <button 
-                    id='replay-btn'
-                    className='w-25 h-25 z-30 absolute top-1/2 -translate-y-1/2 right-3/4'
-                >
+                <button id='replay-btn' className='w-25 h-25 z-30 absolute top-1/2 -translate-y-1/2 right-3/4'>
                     <img src="/video-replay.svg" alt="replay" />
                 </button>
 
@@ -203,10 +259,7 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
                     )}
                 </button>
 
-                <button 
-                    id='forward-btn'
-                    className='w-25 h-25 z-30 absolute top-1/2 -translate-y-1/2 left-3/4'
-                >
+                <button id='forward-btn' className='w-25 h-25 z-30 absolute top-1/2 -translate-y-1/2 left-3/4'>
                     <img src="/video-forward.svg" alt="forward" />
                 </button>
 
