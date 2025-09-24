@@ -107,66 +107,8 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
         video.paused ? video.play() : video.pause();
     };
 
-    useEffect(() => {
-        const progressBar = document.getElementById('progress-bar');
-        if (!progressBar || !videoRef.current) return;
-
-        let isDragging = false;
-
-        const updateTime = (clientX) => {
-            const rect = progressBar.getBoundingClientRect();
-            const posX = clientX - rect.left;
-            const percent = Math.max(0, Math.min(posX / rect.width, 1));
-            videoRef.current.currentTime = percent * videoRef.current.duration;
-        };
-
-        const handleMouseDown = (e) => {
-            isDragging = true;
-            updateTime(e.clientX);
-        };
-
-        const handleMouseMove = (e) => {
-            if (isDragging) updateTime(e.clientX);
-        };
-
-        const handleMouseUp = () => {
-            isDragging = false;
-        };
-
-        const handleTouchStart = (e) => {
-            isDragging = true;
-            updateTime(e.touches[0].clientX);
-        };
-
-        const handleTouchMove = (e) => {
-            if (isDragging) updateTime(e.touches[0].clientX);
-        };
-
-        const handleTouchEnd = () => {
-            isDragging = false;
-        };
-
-        progressBar.addEventListener('mousedown', handleMouseDown);
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseup', handleMouseUp);
-
-        progressBar.addEventListener('touchstart', handleTouchStart);
-        window.addEventListener('touchmove', handleTouchMove);
-        window.addEventListener('touchend', handleTouchEnd);
-
-        return () => {
-            progressBar.removeEventListener('mousedown', handleMouseDown);
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
-
-            progressBar.removeEventListener('touchstart', handleTouchStart);
-            window.removeEventListener('touchmove', handleTouchMove);
-            window.removeEventListener('touchend', handleTouchEnd);
-        };
-    }, []);
-
     return (
-        <div id="video-container" className="w-full max-w-4xl mx-auto relative top-16 z-50">
+        <div id="video-container" className="w-full max-w-4xl mx-auto relative top-16 z-50 select-none">
             <div className="aspect-video bg-black rounded overflow-hidden relative">
 
                 {isLoading && (
@@ -184,8 +126,7 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
                 />
 
                 <div
-                    id="progress-bar"
-                    className="absolute bottom-0 left-0 w-full h-2 bg-gray-800 cursor-pointer z-40 select-none"
+                    className="absolute bottom-0 left-0 w-full h-2 bg-gray-800 cursor-pointer z-40"
                     onMouseMove={(e) => {
                         if (!videoRef.current || !thumbnails.length) return;
                         const rect = e.currentTarget.getBoundingClientRect();
