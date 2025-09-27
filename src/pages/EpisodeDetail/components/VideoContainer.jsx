@@ -70,7 +70,7 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
             const offsetX = Math.min(Math.max(0, touch.clientX - rect.left), rect.width);
             const percent = (offsetX / rect.width) * 100;
             setDragPercent(percent);
-            setPreview(null);
+            //setPreview(null);
         };
 
         const handleTouchEnd = () => {
@@ -94,6 +94,31 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
             document.removeEventListener('touchend', handleTouchEnd);
         };
     }, [isDragging, dragPercent]);
+
+    useEffect(() => {
+        if (!isDragging || !videoRef.current || !thumbnails.length || dragPercent === null) return;
+
+        const time = (dragPercent / 100) * videoRef.current.duration;
+        const thumb = thumbnails.find(t => time >= t.start && time < t.end);
+        const rect = document.getElementById('progress-bar-container').getBoundingClientRect();
+        const posX = (dragPercent / 100) * rect.width;
+
+        if (thumb) {
+            const tooltipWidth = 160;
+            const padding = 8;
+            let adjustedLeft = posX;
+
+            if (posX < tooltipWidth / 2 + padding) {
+                adjustedLeft = tooltipWidth / 2 + padding;
+            }
+            if (posX > rect.width - tooltipWidth / 2 - padding) {
+                adjustedLeft = rect.width - tooltipWidth / 2 - padding;
+            }
+
+            setPreview({ leftPx: adjustedLeft, thumb });
+        }
+    }, [dragPercent, isDragging, thumbnails]);
+
 
     useEffect(() => {
         const video = videoRef.current;
@@ -220,12 +245,13 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
                     ></div>
 
                     <div
-                        className="absolute top-0 left-0 h-full bg-red-500 transition-all duration-100 ease-linear"
+                        className="absolute top-0 left-0 h-full bg-red-500"
                         style={{ width: `${isDragging ? dragPercent : progress}%` }}
                     ></div>
 
                     <div
-                        className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-md transition-all duration-100 ease-linear z-50"
+                        className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-md z-50 ${isDragging ? '' : 'transition-all duration-50 ease-linear'
+                            }`}
                         style={{ left: `calc(${isDragging ? dragPercent : progress}% - 8px)` }}
                         onMouseDown={(e) => {
                             e.preventDefault();
