@@ -19,7 +19,9 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
 
     const [showControls, setShowControls] = useState(true);
 
-    
+    const [showOptions, setShowOptions] = useState(false);
+    const [wasPlayingBeforeOptions, setWasPlayingBeforeOptions] = useState(false);
+
 
     useEffect(() => {
         if (!vttUrl) return;
@@ -234,6 +236,22 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
         }
     };
 
+    const openOptions = () => {
+        if (videoRef.current && !videoRef.current.paused) {
+            setWasPlayingBeforeOptions(true);
+            videoRef.current.pause();
+        }
+        setShowOptions(true);
+    };
+
+    const closeOptions = () => {
+        setShowOptions(false);
+        if (wasPlayingBeforeOptions && videoRef.current) {
+            videoRef.current.play();
+            setWasPlayingBeforeOptions(false);
+        }
+    };
+
     return (
         <div id="video-container" className="w-full max-w-4xl mx-auto relative top-16 z-50 select-none">
 
@@ -363,6 +381,7 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
 
                     <button
                         id='more-options-btn'
+                        onClick={openOptions}
                         className='w-10 h-10 z-30 absolute top-2.5 right-15 bg-black/40 rounded-full'
                     >
                         <img src="/more-vert-video.svg" alt="more-video" className='m-1' />
@@ -379,7 +398,52 @@ const VideoPlayer = ({ src, poster, vttUrl, thubs = [] }) => {
 
                 </div>
 
+                <section
+                    id='options'
+                    className={`h-full w-1/3 z-50 absolute top-0 bg-neutral-900/80 rounded-br-2xl rounded-tr-2xl p-3 text-white transition-transform duration-300 ease-in-out ${showOptions ? 'translate-x-0' : '-translate-x-full'
+                        }`}
+                >
+                    <button id='close-options-btn' onClick={closeOptions}>
+                        <img src="/close.svg" alt="close-svg" />
+                    </button>
 
+                    <div
+                        className='flex justify-between items-center'
+                    >
+
+                        <div className='ml-1 mt-3'>Calidad</div>
+                        <div className='flex '>
+                            <span>1080</span> 
+                            <img src="/chevron-right.svg" alt="chevron-right" />
+                        </div>
+
+                    </div>
+
+                    <div
+                        className='flex justify-between items-center'
+                    >
+
+                        <div className='ml-1 mt-2'>Subtítulos</div>
+                        <div className='flex'>
+                            <span>Español</span>
+                            <img src="/chevron-right.svg" alt="chevron-right" />
+                        </div>
+
+                    </div>
+
+                    <div
+                        className='flex justify-between items-center'
+                    >
+
+                        <div className='ml-1 mt-2'>Velocidad</div>
+                        <div className='flex'>
+                            <span>x1.0</span>
+                            <img src="/chevron-right.svg" alt="chevron-right" />
+                        </div>
+
+                    </div>
+
+                </section>
 
 
             </div>
